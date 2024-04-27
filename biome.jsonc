@@ -1,37 +1,63 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.7.0/schema.json",
-    "organizeImports": {
-      "enabled": true
-    },
-    "linter": {
-      "enabled": true,
-      "rules": {
-        "recommended": true
-      }
-    },
-    "formatter": {
-      "enabled": true,
-      "formatWithErrors": false,
-      "attributePosition": "auto",
-      "indentStyle": "space",
-      "indentWidth": 2,
-      "lineEnding": "lf",
-      "lineWidth": 80
-    },
-    "javascript": {
-      "formatter": {
-        "arrowParentheses": "always",
-        "bracketSameLine": false,
-        "bracketSpacing": true,
-        "jsxQuoteStyle": "double",
-        "quoteProperties": "asNeeded",
-        "semicolons": "always",
-        "trailingComma": "all"
-      }
-    },
-    "json": {
-      "formatter": {
-        "trailingCommas": "none"
-      }
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/1.7.0/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"complexity": {
+				"useSimplifiedLogicExpression": "warn",
+        "noExcessiveCognitiveComplexity": "error"
+			},
+			"correctness": {
+				"noNewSymbol": "error",
+				"noUnusedImports": "error",
+				"noUnusedPrivateClassMembers": "error",
+				"noUnusedVariables": "warn"
+			},
+			"performance": {
+				"noBarrelFile": "error"
+			},
+			"style": {
+				"useBlockStatements": "error",
+				"useConsistentArrayType": "error",
+				"useFragmentSyntax": "warn",
+				"useNodeAssertStrict": "warn",
+				"useShorthandArrayType": "error",
+				"useShorthandAssign": "error",
+				"useSingleCaseStatement": "error"
+			},
+			"suspicious": {
+				"noEmptyBlockStatements": "error",
+				"useAwait": "error"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"attributePosition": "auto",
+		"indentStyle": "space",
+		"indentWidth": 2,
+		"lineEnding": "lf",
+		"lineWidth": 80
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "always",
+			"bracketSameLine": false,
+			"bracketSpacing": true,
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "always",
+			"trailingComma": "all"
+		}
+	},
+	"json": {
+		"formatter": {
+			"trailingCommas": "none"
+		}
+	}
+}
