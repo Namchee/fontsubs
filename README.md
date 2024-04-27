@@ -1,2 +1,3 @@
-# fontsubs
-Automatically subset your webfonts from your build output
+# FontSubs
+
+Automatically subset your local webfonts from your build output.
