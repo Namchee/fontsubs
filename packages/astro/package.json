@@ -1,0 +1,21 @@
+{
+  "name": "astro-fontsubs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "astro-integration-kit": "^0.12.0"
+  },
+  "peerDependencies": {
+    "astro": "^4"
+  },
+  "devDependencies": {
+    "astro": "^4.7.0"
+  }
+}
