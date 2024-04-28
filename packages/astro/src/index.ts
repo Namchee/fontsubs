@@ -2,7 +2,7 @@ import { defineIntegration } from 'astro-integration-kit';
 
 import { z } from 'astro/zod';
 
-import { exec } from 'node:child_process';
+import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 
 export const subset = defineIntegration({
@@ -22,7 +22,7 @@ export const subset = defineIntegration({
      *
      * @default `false`
      */
-    optimizeVariableFonts: z.boolean().optional().default(false),
+    optimizeVariableFonts: z.boolean().optional().default(true),
     /**
      * Inline the optimized fonts directly in the @font-face declaration.
      *
@@ -47,8 +47,8 @@ export const subset = defineIntegration({
   setup: ({ options }) => {
     return {
       hooks: {
-        'astro:build:done': ({ dir }) => {
-          const flags = ['--in-place', '--no-fallbacks'];
+        'astro:build:done': ({ dir, pages }) => {
+          const flags = ['--in-place', '--no-fallbacks', '--debug'];
           if (options?.whitelist) {
             flags.push(`--text=${options.whitelist}`);
           }
@@ -65,9 +65,11 @@ export const subset = defineIntegration({
             flags.push('--dynamic');
           }
 
-          flags.push(options?.debug ? '--debug' : '--silent');
+          flags.push(options?.debug ? '' : '');
 
-          exec(`subfont ${resolve(dir.pathname, '**', '*.html')} ${flags.join(' ')}`);
+          const input = pages.map(({ pathname }) => resolve(dir.pathname, pathname, 'index.html'));
+
+          execSync(`subfont ${input.join(' ')} ${flags.join(' ')}`);
         },
       },
     };
