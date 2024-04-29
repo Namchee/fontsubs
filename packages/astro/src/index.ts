@@ -7,7 +7,9 @@ import { resolve } from "node:path";
 
 import chalk from "chalk";
 
-const execCommand = (command: string) => new Promise((resolve, reject) => {
+import { getTotalSavings } from "./utils";
+
+const execCommand = (command: string): Promise<string> => new Promise((resolve, reject) => {
   exec(command, (err, stdout, stderr) => {
     if (err) {
       reject(err);
@@ -94,14 +96,19 @@ export const subset = defineIntegration({
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
-            console.log(chalk.green('Optimizing font for pages: '));
-            input.forEach(page => console.log(chalk.green(`▶ ${page}`)));
+            console.log(chalk.green('Optimizing font for pages:\n'));
+            for (const page of input) {
+              console.log(chalk.green(` ▶ ${page}\n`));
+            }
           }
 
           try {
             const output = await execCommand(command);
+            const bytesSaved = getTotalSavings(output);
+
+            console.log(chalk.green(`\n ✔️ Successfully saved ${bytesSaved}`));
           } catch (err) {
-            chalk.white.bgRed(`Failed to optimize fonts due to ${err}`);
+            console.error(chalk.white.bgRed(`Failed to optimize fonts due to ${err}`));
           }
         },
       },
