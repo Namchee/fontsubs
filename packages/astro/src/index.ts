@@ -2,8 +2,24 @@ import { defineIntegration } from "astro-integration-kit";
 
 import { z } from "astro/zod";
 
-import { execSync } from "node:child_process";
+import { exec, } from "node:child_process";
 import { resolve } from "node:path";
+
+import chalk from "chalk";
+
+const execCommand = (command: string) => new Promise((resolve, reject) => {
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      reject(err);
+    }
+
+    if (stderr) {
+      reject(stderr);
+    }
+
+    resolve(stdout);
+  })
+});
 
 export const subset = defineIntegration({
   name: "subset",
@@ -50,8 +66,8 @@ export const subset = defineIntegration({
   setup: ({ options }) => {
     return {
       hooks: {
-        "astro:build:done": ({ dir, pages }) => {
-          const flags = ["--in-place", "--no-fallbacks", "--debug"];
+        "astro:build:done": async ({ dir, pages }) => {
+          const flags = ["--in-place", "--no-fallbacks"];
           if (options?.whitelist) {
             flags.push(`--text=${options.whitelist}`);
           }
@@ -76,7 +92,17 @@ export const subset = defineIntegration({
             ),
           );
 
-          execSync(`subfont ${input.join(" ")} ${flags.join(" ")}`);
+          const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
+          if (options?.debug) {
+            console.log(chalk.green('Optimizing font for pages: '));
+            input.forEach(page => console.log(chalk.green(`▶ ${page}`)));
+          }
+
+          try {
+            const output = await execCommand(command);
+          } catch (err) {
+            chalk.white.bgRed(`Failed to optimize fonts due to ${err}`);
+          }
         },
       },
     };
