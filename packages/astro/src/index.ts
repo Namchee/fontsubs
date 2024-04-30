@@ -5,7 +5,7 @@ import { z } from "astro/zod";
 import { exec } from "node:child_process";
 import { resolve } from "node:path";
 
-import { bgGreen, bgRed, black, gray, green } from "kleur";
+import kleur from "kleur";
 
 import { getTotalSavings } from "./utils";
 
@@ -103,13 +103,16 @@ export const subset = defineIntegration({
             return resolve(...parts);
           });
 
-          console.log(bgGreen(black(" Generating optimized fonts \n")));
+          console.log(
+            kleur.bgGreen().black(" generating optimized fonts "));
+
+          console.log();
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
-            console.log(green(`${getCurrentTime()} Detected pages: \n`));
+            console.log(kleur.green(`${getCurrentTime()} Detected pages: \n`));
             for (const page of input) {
-              console.log(green(`${getCurrentTime()} ▶ ${page}\n`));
+              console.log(kleur.green(`${getCurrentTime()} ▶ ${page}\n`));
             }
           }
 
@@ -118,12 +121,13 @@ export const subset = defineIntegration({
             const bytesSaved = getTotalSavings(output);
 
             console.log(
-              gray(getCurrentTime()),
-              green(`✓ Successfully reduced font payload by ${bytesSaved}`),
+              kleur.dim(getCurrentTime()),
+              kleur.green(`✓ Successfully reduced font payload by ${bytesSaved}`),
             );
+            console.log();
           } catch (err) {
             console.error(
-              bgRed(`Failed to optimize fonts due to ${err}`),
+              kleur.bgRed(`Failed to optimize fonts due to ${err}`),
             );
           }
         },
