@@ -2,26 +2,23 @@ import { defineIntegration } from "astro-integration-kit";
 
 import { z } from "astro/zod";
 
-import { exec, } from "node:child_process";
+import { exec } from "node:child_process";
 import { resolve } from "node:path";
 
 import chalk from "chalk";
 
 import { getTotalSavings } from "./utils";
 
-const execCommand = (command: string): Promise<string> => new Promise((resolve, reject) => {
-  exec(command, (err, stdout, stderr) => {
-    if (err) {
-      reject(err);
-    }
+const execCommand = (command: string): Promise<string> =>
+  new Promise((resolve, reject) => {
+    exec(command, (err, stdout) => {
+      if (err) {
+        reject(err);
+      }
 
-    if (stderr) {
-      reject(stderr);
-    }
-
-    resolve(stdout);
-  })
-});
+      resolve(stdout);
+    });
+  });
 
 export const subset = defineIntegration({
   name: "subset",
@@ -86,17 +83,22 @@ export const subset = defineIntegration({
             flags.push("--dynamic");
           }
 
-          const input = pages.map(({ pathname }) =>
-            resolve(
-              dir.pathname,
-              pathname,
-              pathname.startsWith("404") ? "" : "index.html",
-            ),
-          );
+          const input = pages.map(({ pathname }) => {
+            const parts = [dir.pathname, pathname];
+            if (pathname.startsWith('404')) {
+              parts[-1] += '.html';
+            } else {
+              parts.push(pathname, "index.html");
+            }
+
+            return resolve(...parts);
+          });
+
+          console.log(chalk.black.bgGreen(" Generating optimized fonts \n"));
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
-            console.log(chalk.green('Optimizing font for pages:\n'));
+            console.log(chalk.green(" Detected pages: \n"));
             for (const page of input) {
               console.log(chalk.green(` ▶ ${page}\n`));
             }
@@ -108,7 +110,9 @@ export const subset = defineIntegration({
 
             console.log(chalk.green(`\n ✔️ Successfully saved ${bytesSaved}`));
           } catch (err) {
-            console.error(chalk.white.bgRed(`Failed to optimize fonts due to ${err}`));
+            console.error(
+              chalk.white.bgRed(`Failed to optimize fonts due to ${err}`),
+            );
           }
         },
       },
