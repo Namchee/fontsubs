@@ -5,7 +5,7 @@ import { z } from "astro/zod";
 import { exec } from "node:child_process";
 import { resolve } from "node:path";
 
-import chalk from "chalk";
+import { bgGreen, bgRed, black, gray, green } from "kleur";
 
 import { getTotalSavings } from "./utils";
 
@@ -19,6 +19,15 @@ const execCommand = (command: string): Promise<string> =>
       resolve(stdout);
     });
   });
+
+const getCurrentTime = (): string => {
+  const now = new Date();
+
+  return `${now.getHours().toString().padStart(2, "0")}:${now
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+};
 
 export const subset = defineIntegration({
   name: "subset",
@@ -85,8 +94,8 @@ export const subset = defineIntegration({
 
           const input = pages.map(({ pathname }) => {
             const parts = [dir.pathname, pathname];
-            if (pathname.startsWith('404')) {
-              parts[-1] += '.html';
+            if (pathname.startsWith("404")) {
+              parts[-1] += ".html";
             } else {
               parts.push(pathname, "index.html");
             }
@@ -94,13 +103,13 @@ export const subset = defineIntegration({
             return resolve(...parts);
           });
 
-          console.log(chalk.black.bgGreen(" Generating optimized fonts \n"));
+          console.log(bgGreen(black(" Generating optimized fonts \n")));
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
-            console.log(chalk.green(" Detected pages: \n"));
+            console.log(green(`${getCurrentTime()} Detected pages: \n`));
             for (const page of input) {
-              console.log(chalk.green(` ▶ ${page}\n`));
+              console.log(green(`${getCurrentTime()} ▶ ${page}\n`));
             }
           }
 
@@ -108,10 +117,13 @@ export const subset = defineIntegration({
             const output = await execCommand(command);
             const bytesSaved = getTotalSavings(output);
 
-            console.log(chalk.green(`\n ✔️ Successfully saved ${bytesSaved}`));
+            console.log(
+              gray(getCurrentTime()),
+              green(`✓ Successfully reduced font payload by ${bytesSaved}`),
+            );
           } catch (err) {
             console.error(
-              chalk.white.bgRed(`Failed to optimize fonts due to ${err}`),
+              bgRed(`Failed to optimize fonts due to ${err}`),
             );
           }
         },
