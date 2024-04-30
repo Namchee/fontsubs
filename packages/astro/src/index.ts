@@ -2,32 +2,11 @@ import { defineIntegration } from "astro-integration-kit";
 
 import { z } from "astro/zod";
 
-import { exec } from "node:child_process";
 import { resolve } from "node:path";
 
 import kleur from "kleur";
 
-import { getTotalSavings } from "./utils";
-
-const execCommand = (command: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    exec(command, (err, stdout) => {
-      if (err) {
-        reject(err);
-      }
-
-      resolve(stdout);
-    });
-  });
-
-const getCurrentTime = (): string => {
-  const now = new Date();
-
-  return `${now.getHours().toString().padStart(2, "0")}:${now
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
-};
+import { execCommand, getCurrentTime, getTotalSavings } from "./utils";
 
 export const subset = defineIntegration({
   name: "subset",
@@ -67,7 +46,7 @@ export const subset = defineIntegration({
        *
        * @default `false`
        */
-      debug: z.boolean().optional().default(false),
+      debug: z.boolean().optional().default(true),
     })
     .optional()
     .default({}),
@@ -95,24 +74,33 @@ export const subset = defineIntegration({
           const input = pages.map(({ pathname }) => {
             const parts = [dir.pathname, pathname];
             if (pathname.startsWith("404")) {
-              parts[-1] += ".html";
+              parts[1] = `${pathname.slice(0, -1)}.html`;
             } else {
-              parts.push(pathname, "index.html");
+              parts.push("index.html");
             }
 
             return resolve(...parts);
           });
 
           console.log(
-            kleur.bgGreen().black(" generating optimized fonts "));
-
-          console.log();
+            kleur
+              .bgGreen()
+              .black(" [astro-subfont] generating optimized fonts "),
+            "\n",
+          );
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
-            console.log(kleur.green(`${getCurrentTime()} Detected pages: \n`));
+            console.log(
+              kleur.dim(getCurrentTime()),
+              kleur.green(' Detected pages:'),
+            );
             for (const page of input) {
-              console.log(kleur.green(`${getCurrentTime()} ▶ ${page}\n`));
+              console.log(
+                kleur.dim(getCurrentTime()),
+                kleur.green(' ▶ '),
+                page,
+              );
             }
           }
 
@@ -122,9 +110,11 @@ export const subset = defineIntegration({
 
             console.log(
               kleur.dim(getCurrentTime()),
-              kleur.green(`✓ Successfully reduced font payload by ${bytesSaved}`),
+              kleur.green(
+                `✓ Successfully reduced font payload by ${bytesSaved}`,
+              ),
             );
-            console.log();
+            console.log(output);
           } catch (err) {
             console.error(
               kleur.bgRed(`Failed to optimize fonts due to ${err}`),
