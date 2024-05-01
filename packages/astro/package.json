@@ -1,13 +1,20 @@
 {
-  "name": "astro-subfont",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@namchee/astro-subfont",
+  "version": "0.1.0",
+  "description": "Generate most optimal font subsets for your Astro-powered websites",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "npm install -g subfont"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "astro",
+    "astro-integration"
+  ],
+  "author": {
+    "email": "hello@namchee.dev",
+    "name": "Cristopher",
+    "url": "https://www.namchee.dev"
+  },
   "license": "ISC",
   "dependencies": {
     "astro-integration-kit": "^0.12.0",

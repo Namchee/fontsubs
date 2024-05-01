@@ -26,6 +26,9 @@ importers:
       astro-integration-kit:
         specifier: ^0.12.0
         version: 0.12.0(astro@4.7.0(@types/node@20.12.7)(typescript@5.4.5))
+      kleur:
+        specifier: ^4.1.5
+        version: 4.1.5
     devDependencies:
       astro:
         specifier: ^4.7.0

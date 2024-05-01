@@ -1,5 +1,3 @@
-import { exec } from "node:child_process";
-
 /**
  * Get total bytes saved by the optimization
  *
@@ -10,26 +8,6 @@ export function getTotalSavings(output: string): string {
   const pattern = output.match(/Total savings: (-?[\d\.]+ .+[b|B])/);
 
   return pattern ? pattern[1] : '';
-}
-
-/**
- * Execute a child process in async manner.
- *
- * Output to `stderr` is ignored.
- *
- * @param {string} command - command to be executed.
- * @returns {string} A promise that resolves into `stdout` output.
- */
-export function execCommand(command: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    exec(command, (err, stdout, ) => {
-      if (err) {
-        reject(err);
-      }
-
-      resolve(stdout);
-    });
-  });
 }
 
 /**

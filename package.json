@@ -1,8 +1,8 @@
 {
   "name": "fontsubs",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Subfont integration for frameworks and build-tools.",
+  "main": "",
   "scripts": {
     "format": "biome format --write *.*",
     "lint": "biome lint --apply *.*"

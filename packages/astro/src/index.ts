@@ -2,11 +2,12 @@ import { defineIntegration } from "astro-integration-kit";
 
 import { z } from "astro/zod";
 
+import { execSync } from "node:child_process";
 import { resolve } from "node:path";
 
 import kleur from "kleur";
 
-import { execCommand, getCurrentTime, getTotalSavings } from "./utils";
+import { getCurrentTime, getTotalSavings } from "./utils";
 
 export const subset = defineIntegration({
   name: "subset",
@@ -28,13 +29,13 @@ export const subset = defineIntegration({
        */
       optimizeVariableFonts: z.boolean().optional().default(true),
       /**
-       * Inline the optimized fonts directly in the @font-face declaration.
+       * Inline the optimized fonts directly in the `@font-face` declaration.
        *
        * @default `false`
        */
       inline: z.boolean().optional().default(false),
       /**
-       * Analyze webfonts usage dynamically using headless browsers.
+       * Analyze webfonts usage dynamically by running headless browsers.
        *
        * Mainly used for on-demand renders.
        *
@@ -42,18 +43,18 @@ export const subset = defineIntegration({
        */
       dynamic: z.boolean().optional().default(false),
       /**
-       * Enable verbose output to stdout.
+       * Enable verbose output to `stdout`.
        *
        * @default `false`
        */
-      debug: z.boolean().optional().default(true),
+      debug: z.boolean().optional().default(false),
     })
     .optional()
     .default({}),
   setup: ({ options }) => {
     return {
       hooks: {
-        "astro:build:done": async ({ dir, pages }) => {
+        "astro:build:done": ({ dir, pages }) => {
           const flags = ["--in-place", "--no-fallbacks"];
           if (options?.whitelist) {
             flags.push(`--text=${options.whitelist}`);
@@ -86,36 +87,43 @@ export const subset = defineIntegration({
             kleur
               .bgGreen()
               .black(" [astro-subfont] generating optimized fonts "),
-            "\n",
           );
 
           const command = `subfont ${input.join(" ")} ${flags.join(" ")}`;
           if (options?.debug) {
             console.log(
               kleur.dim(getCurrentTime()),
-              kleur.green(' Detected pages:'),
+              kleur.green("Detected pages:"),
             );
+
             for (const page of input) {
               console.log(
                 kleur.dim(getCurrentTime()),
-                kleur.green(' ▶ '),
-                page,
+                kleur.green("▶"),
+                page.replace(dir.pathname, ""),
+              );
+
+              console.log(
+                kleur.dim(getCurrentTime()),
+                kleur.green("  └─"),
+                kleur.dim(page),
               );
             }
           }
 
           try {
-            const output = await execCommand(command);
-            const bytesSaved = getTotalSavings(output);
+            const output = execSync(command, { stdio: 'pipe' });
+            const bytesSaved = getTotalSavings(output.toString());
 
             console.log(
               kleur.dim(getCurrentTime()),
               kleur.green(
                 `✓ Successfully reduced font payload by ${bytesSaved}`,
               ),
+              "\n",
             );
-            console.log(output);
           } catch (err) {
+            console.log('error gan');
             console.error(
               kleur.bgRed(`Failed to optimize fonts due to ${err}`),
             );
