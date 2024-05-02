@@ -44,6 +44,10 @@
     "tsup": "^8.0.2"
   },
   "repository": "Namchee/fontsubs",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "auto": {
     "plugins": [
       "npm",
