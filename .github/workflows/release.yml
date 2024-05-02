@@ -26,7 +26,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # Shouldn't do this, but it doesn't work on monorepo
         run: |
+          cd packages/astro
           pnpm install
-          pnpm run -r build
+          pnpm run build
           pnpx auto shipit
