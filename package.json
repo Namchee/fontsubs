@@ -2,14 +2,17 @@
   "name": "fontsubs",
   "version": "1.0.0",
   "description": "Subfont integration for frameworks and build-tools.",
-  "main": "",
   "scripts": {
     "format": "biome format --write *.*",
     "lint": "biome lint --apply *.*"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "email": "hello@namchee.dev",
+    "name": "Cristopher",
+    "url": "https://www.namchee.dev"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^1.7.1",
     "@types/node": "^20.12.7",
