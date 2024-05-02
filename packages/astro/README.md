@@ -64,7 +64,7 @@ This integration can be configured by passing a configuration object with the fo
 | `optimizeVariableFonts` | `boolean` | `true` | Allow optimization of [variable font](https://fonts.google.com/knowledge/introducing_type/introducing_variable_fonts) features, such as weights and axes. Experimental. |
 | `inline` | `boolean` | `false` | Inline the optimized fonts directly in the `@font-face` declaration. |
 | `dynamic` | `boolean` | `false` | Analyze webfonts usage dynamically by running headless browsers. |
-| `debug` | `boolean` | `false` | Enable verbose output to `stdout`. ||
+| `debug` | `boolean` | `false` | Enable verbose output to `stdout`. |
 
 ## Acknowledgements
 

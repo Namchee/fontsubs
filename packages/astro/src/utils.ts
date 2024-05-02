@@ -7,7 +7,7 @@
 export function getTotalSavings(output: string): string {
   const pattern = output.match(/Total savings: (-?[\d\.]+ .+[b|B])/);
 
-  return pattern ? pattern[1] : '';
+  return pattern?.[1] ? pattern[1] : '';
 }
 
 /**

@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 
 import kleur from "kleur";
 
-import { getCurrentTime, getTotalSavings } from "./utils";
+import { getCurrentTime, getTotalSavings } from "./utils.js";
 
 export const subset = defineIntegration({
   name: "subset",
@@ -123,7 +123,6 @@ export const subset = defineIntegration({
               "\n",
             );
           } catch (err) {
-            console.log('error gan');
             console.error(
               kleur.bgRed(`Failed to optimize fonts due to ${err}`),
             );

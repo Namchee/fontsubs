@@ -1,13 +1,27 @@
 {
   "name": "@namchee/astro-subfont",
   "version": "0.1.0",
-  "description": "Generate most optimal font subsets for your Astro-powered websites",
-  "main": "index.js",
+  "description": "Generate optimal font subsets for your Astro-powered websites",
+  "type": "module",
   "scripts": {
+    "build": "tsup",
     "postinstall": "npm install -g subfont"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "keywords": [
     "astro",
+    "withastro",
+    "optimization",
+    "font",
     "astro-integration"
   ],
   "author": {
@@ -15,7 +29,7 @@
     "name": "Cristopher",
     "url": "https://www.namchee.dev"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "astro-integration-kit": "^0.12.0",
     "kleur": "^4.1.5"
@@ -24,6 +38,7 @@
     "astro": "^4"
   },
   "devDependencies": {
-    "astro": "^4.7.0"
+    "astro": "^4.7.0",
+    "tsup": "^8.0.2"
   }
 }
