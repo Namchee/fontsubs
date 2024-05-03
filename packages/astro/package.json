@@ -38,22 +38,12 @@
     "astro": "^4"
   },
   "devDependencies": {
-    "@auto-it/conventional-commits": "^11.1.6",
     "astro": "^4.7.0",
-    "auto": "^11.1.6",
     "tsup": "^8.0.2"
   },
   "repository": "Namchee/fontsubs",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "auto": {
-    "plugins": [
-      "npm",
-      "conventional-commits",
-      "released"
-    ],
-    "onlyPublishWithReleaseLabel": true
   }
 }
