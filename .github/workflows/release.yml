@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build packages
-        run: pnpm run build
+        run: pnpm run ci:build
       - name: Create and publish version
         uses: changesets/action@v1
         with:
