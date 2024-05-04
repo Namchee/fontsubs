@@ -8,7 +8,6 @@ on:
 env:
   CI: true
   PNPM_CACHE_FOLDER: .pnpm-store
-  HOME: ${{ github.workspace }}
 
 jobs:
   release:
@@ -42,3 +41,4 @@ jobs:
           publish: pnpm run ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOME: ${{ github.workspace }}
